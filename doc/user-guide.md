@@ -24,6 +24,7 @@ Contents:
     + [Event Portal Configuration](#event-portal-configuration)
         * [Event Portal API Token](#event-portal-api-token)
         * [Event Portal Console Organization Prefix](#event-portal-console-organization-prefix)
+    * [Distributed Tracing](#distributed-tracing)
     + [Circuit Breaker Configuration](#circuit-breaker-configuration)
         * [Global Circuit Breaker](#global-circuit-breaker)
         * [Private Circuit Breaker](#private-circuit-breaker)
@@ -44,6 +45,7 @@ Contents:
         * [Destination](#destination)
       - [Optional Parameters](#optional-parameters)
           + [Message](#message)
+          + [Parent Trace](#parent-trace)
       - [Example](#example)
     + [Consume Operation](#consume-operation)
       - [Required Parameters](#required-parameters-1)
@@ -51,16 +53,21 @@ Contents:
         * [Endpoint](#endpoint)
       - [Optional Parameters](#optional-parameters-1)
           + [Time Out](#time-out)
+          + [Parent Trace](#parent-trace-1)
       - [Example](#example-1)
     + [Ack Operation](#ack-operation)
       - [Required Parameters](#required-parameters-2)
         * [Connector Configuration](#connector-configuration-2)
         * [Message Reference Id](#message-reference-id)
+      - [Optional Parameters](#optional-parameters-5)
+          + [Parent Trace](#parent-trace-2)
       - [Example](#example-2)
     + [Nack Operation](#nack-operation)
         - [Required Parameters](#required-parameters-3)
             * [Connector Configuration](#connector-configuration-3)
             * [Message Reference Id](#message-reference-id)
+        - [Optional Parameters](#optional-parameters-6)
+            + [Parent Trace](#parent-trace-3)
         - [Example](#example-3)
     + [Request-Reply Operation](#request-reply-operation)
       - [Required Parameters](#required-parameters-3)
@@ -69,6 +76,7 @@ Contents:
       - [Optional Parameters](#optional-parameters-2)
           + [Request Message](#request-message)
           + [Time Out](#time-out-1)
+          + [Parent Trace](#parent-trace-4)
       - [Example](#example-3)
     + [Recover Session](#recover-session-operation)
         - [Required Parameters](#required-parameters-4)
@@ -154,12 +162,12 @@ For more information about Solace technology in general please visit these resou
 
 If you don't already have a Solace PubSub+ Event Broker available, use one of the options listed in the [Try PubSub+ Event Broker](https://docs.solace.com/Get-Started/Getting-Started-Try-Broker.htm) section of the Solace documentation to quickly spin up a free Solace messaging service. To start using the connector, you'll need to supply the following connection properties for your broker (refer to the setup guide of your broker for information on how to obtain them):
 
-| Property | Description |
-|---|---|
-| Client Username | Username to connect to the event broker |
-| Client Password | Password to connect to the event broker |
-| Message VPN | Specifies the Message VPN to use when connecting to the event broker |
-| Broker Host | This is the address clients use when connecting to the event broker to send and receive messages. (Format: `tcps://FQDN:Port` or `tcps://IP:Port`, - insecure `tcp://` is also accepted) |
+| Property        | Description                                                                                                                                                                              |
+|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Client Username | Username to connect to the event broker                                                                                                                                                  |
+| Client Password | Password to connect to the event broker                                                                                                                                                  |
+| Message VPN     | Specifies the Message VPN to use when connecting to the event broker                                                                                                                     |
+| Broker Host     | This is the address clients use when connecting to the event broker to send and receive messages. (Format: `tcps://FQDN:Port` or `tcps://IP:Port`, - insecure `tcp://` is also accepted) |
 
 ### Setting Up and Getting Access to the PubSub+ Event Catalog
 
@@ -331,6 +339,47 @@ This parameter should be set for non-default organizations and is used to determ
 > For example: A value of `mycompany-sso` would result in Event Portal links like: `https://mycompany-sso.solace.cloud/...`
 
 Although this is not a secret setting, if your org prefix is different than the default we recommend that you set the global `SOLACE_EVENTPORTAL_CONSOLE_ORG_PREFIX` environment variable, similar to the mechanism used to set the API Token.
+
+</br>
+
+### Distributed Tracing
+
+The Solace PubSub+ Connector for Mule 4 supports distributed tracing using OpenTelemetry, which allows you to trace the journey of a message across multiple systems. This provides end-to-end visibility into your event-driven architecture, making it easier to monitor and troubleshoot your applications.
+
+There are two ways to configure distributed tracing (Note that these options are mutually exclusive; you can only enable one at a time):
+
+> **Important:** The Distributed Tracing configuration is managed as a global singleton for all Solace Connector instances within a single Java runtime. Therefore, it is crucial to maintain a consistent configuration across all connections. Either disable distributed tracing for all connections or enable it with the same configuration for all of them. Mixing enabled and disabled configurations, or using different configurations across multiple connections, can lead to unexpected tracing behavior.
+
+*   **Automatic Configuration (Recommended for Production)**: This approach uses standard OpenTelemetry environment variables to configure the tracer. It is the most flexible option and supports all authentication methods, exporters, and sampling strategies defined by the OpenTelemetry standard.
+*   **Manual Configuration (for Local Development and Testing)**: This option provides a simplified configuration for local development and testing. It supports basic configuration with limited exporters in unauthenticated mode only.
+
+#### Automatic Configuration
+
+To enable automatic configuration, select the **OpenTelemetry Environment-based Auto-configuration (Recommended)** checkbox in the **Distributed Tracing** tab of the connector's global configuration.
+
+![alt text](/doc/images/AutoDTConfig.png "New Connector Config: Distributed Tracing - Automatic")
+
+When this option is enabled, the connector will use the following environment variables to configure the tracer:
+
+*   `OTEL_EXPORTER_OTLP_ENDPOINT`: The endpoint of the OpenTelemetry collector.
+*   `OTEL_SERVICE_NAME`: The name of the service that is generating the traces.
+*   `OTEL_TRACES_SAMPLER`: The sampler to use for sampling traces (e.g., `always_on`, `always_off`, `traceidratio`).
+
+For a full list of supported environment variables, refer to the [OpenTelemetry SDK Autoconfiguration](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md) documentation.
+
+#### Manual Configuration
+
+To enable manual configuration, select the **Local Development Tracing Configuration** checkbox in the **Distributed Tracing** tab of the connector's global configuration.
+
+![alt text](/doc/images/ManualDTConfig.png "New Connector Config: Distributed Tracing - Manual")
+
+The following parameters can be configured:
+
+| Parameter field        | Description                                                                                                       |
+|------------------------|-------------------------------------------------------------------------------------------------------------------|
+| Tracer Service Name    | The name of the service that is generating the traces. Defaults to `Solace Mule PubSub+ Connector`.               |
+| Span Exporter Type     | The type of exporter to use for sending traces. Supported values are `GRPC`, `HTTP`, and `NONE`.                  |
+| Span Exporter Endpoint | The endpoint of the OpenTelemetry collector. This is only required if the Span Exporter Type is `GRPC` or `HTTP`. |
 
 </br>
 
@@ -513,9 +562,10 @@ For details of the available properties, refer to the [getter methods](https://d
 
 The following additional parameter in the attributes list is a unique, internally generated reference ID for acknowledgement purposes. For more details about the use of this parameter, refer to the [Ack Operation](#ack-operation) section.
 
-| Parameter field | Description |
-|---|---|
-|messageReferenceId | Use this ID to explicitly acknowledge a message |
+| Parameter field    | Description                                                                                                                     |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| messageReferenceId | Use this ID to explicitly acknowledge a message                                                                                 |
+| traceData          | A map containing the trace context from the inbound message. This can be passed to subsequent operations to continue the trace. |
 
 </br>
 
@@ -524,6 +574,8 @@ The following additional parameter in the attributes list is a unique, internall
 ### Publish Operation
 
 This operation publishes a direct or a guaranteed message to the PubSub+ Event Broker.
+
+> **Note:** When distributed tracing is enabled, the published message includes trace data such as `otel_parent_trace_id` and `otel_parent_span_id` in its User Properties.
 
 #### Required Parameters
 
@@ -552,14 +604,20 @@ For additional optional parameters, refer to the [Common Parameters](#common-par
 
 Specifies message content, type and message attributes.
 
-| Parameter field | Description |
-|---|---|
-|Body | The message contents, can be a Mule expression. Default is `#[payload]`. |
-|Message Type | Sets the [JCSMP message type](https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Creating-Messages-1.htm?Highlight=Java%20API%20bytesmessage#Types). Select supported types from the dropdown: `BytesMessage`, `TextMessage`, `XMLContentMessage` or Default `Dynamic`, which means that the most appropriate type is automatically determined based on message contents. |
-|Additional Message Properties | Select "Edit inline" to provide Solace JCSMP message properties. For details of the available properties, refer to the [setter methods](https://docs.solace.com/API-Developer-Online-Ref-Documentation/java/com/solacesystems/jcsmp/XMLMessage.html) in the JCSMP API documentation. |
-|Correlation Id | Sets the correlation ID for [Request-Reply messaging](https://docs.solace.com/PubSub-Basics/Core-Concepts-Message-Models.htm#Request-). The correlation ID is used for correlating a request to a reply. |
-|Reply-To Destination | Sets the replyTo destination for the message in Request-Reply messaging. Select "Edit inline" to provide a Reply-To destination name and type. |
-|Is Reply Message | Sets the message's reply field, indicating that this message is a reply in Request-Reply messaging.|
+| Parameter field               | Description                                                                                                                                                                                                                                                                                                                                                                                     |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Body                          | The message contents, can be a Mule expression. Default is `#[payload]`.                                                                                                                                                                                                                                                                                                                        |
+| Message Type                  | Sets the [JCSMP message type](https://docs.solace.com/Solace-PubSub-Messaging-APIs/API-Developer-Guide/Creating-Messages-1.htm?Highlight=Java%20API%20bytesmessage#Types). Select supported types from the dropdown: `BytesMessage`, `TextMessage`, `XMLContentMessage` or Default `Dynamic`, which means that the most appropriate type is automatically determined based on message contents. |
+| Additional Message Properties | Select \"Edit inline\" to provide Solace JCSMP message properties. For details of the available properties, refer to the [setter methods](https://docs.solace.com/API-Developer-Online-Ref-Documentation/java/com/solacesystems/jcsmp/XMLMessage.html) in the JCSMP API documentation.                                                                                                          |
+| Correlation Id                | Sets the correlation ID for [Request-Reply messaging](https://docs.solace.com/PubSub-Basics/Core-Concepts-Message-Models.htm#Request-). The correlation ID is used for correlating a request to a reply.                                                                                                                                                                                        |
+| Reply-To Destination          | Sets the replyTo destination for the message in Request-Reply messaging. Select \"Edit inline\" to provide a Reply-To destination name and type.                                                                                                                                                                                                                                                |
+| Is Reply Message              | Sets the message\'s reply field, indicating that this message is a reply in Request-Reply messaging.                                                                                                                                                                                                                                                                                            |
+
+##### Trace Context
+
+| Parameter field | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Parent Trace    | A map containing the trace context to be propagated with the message. Providing a parent trace context here ensures that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, a map containing the parent\'s trace context is required, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`. |
 
 #### Example
 
@@ -619,6 +677,12 @@ Specifies the maximum wait time for an available message. The default is 1 secon
 |Time Out | Set the time amount—the default is 1000. |
 |Time Unit | Set the time unit—default is `MILLISECONDS`. |
 
+##### Trace Context
+
+| Parameter field  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Parent Trace     | A map containing the trace context to be propagated with the message. Providing a parent trace context here ensures that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, a map containing the parent\'s trace context is required, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`. |
+
 #### Example
 
 ![alt text](/doc/images/Consume-Example.png "Consume Example")
@@ -656,6 +720,14 @@ Selects which connector configuration to use.
 Specifies the "Reference Id" property from the Solace Message Properties of the message to be acknowledged.
 
 >Note that this is NOT the "Message Id" property!
+
+#### Optional Parameters
+
+##### Trace Context
+
+| Parameter field  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Parent Trace     | A map containing the trace context to be propagated with the message. Providing a parent trace context here ensures that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, a map containing the parent\'s trace context is required, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`. |
 
 #### Example
 
@@ -704,6 +776,13 @@ Specifies the "Reference Id" property from the Solace Message Properties of the 
 FAILED (Default) <br/>
 REJECTED
 
+#### Optional Parameters
+
+##### Trace Context
+
+| Parameter field  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Parent Trace     | A map containing the trace context to be propagated with the message. Providing a parent trace context here ensures that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, a map containing the parent\'s trace context is required, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`. |
 
 #### Example
 
@@ -780,6 +859,12 @@ After timeout an error condition is raised which can be handled by an Error Hand
 |---|---|
 |Time Out | Set the time amount—the default is 1000. |
 |Time Unit | Set the time unit—default is `MILLISECONDS`. |
+
+##### Trace Context
+
+| Parameter field  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Parent Trace     | A map containing the trace context to be propagated with the message. Providing a parent trace context here ensures that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, a map containing the parent\'s trace context is required, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`. |
 
 #### Example
 
@@ -965,7 +1050,7 @@ For more details, refer to the [Simple Sender Listener](../demo/README.md#simple
 
 This is a polling source which can be used to receive guaranteed messages from the PubSub+ Event Broker from a queue at a fixed scheduling rate. Every time the poll is triggered, the source retrieves in range of 1 to 10 messages to dispatch to the flow individually.  
 
-All the required and optional parameter of [Guaranteed Endpoint Listener Source] applies here as well, in addition to the following optional parameters.
+All the required and optional parameter of [Guaranteed Endpoint Listener](#guaranteed-endpoint-listener) source applies here as well, in addition to the following optional parameters.
 
 #### Other Optional Parameters
 
@@ -1001,4 +1086,3 @@ For other optional parameters, refer to the [Common Parameters](#common-paramete
 ```
 
 For more details, refer to the [Polling Listener](../demo/README.md#pollinglistenerfixedfrequency---polling-listener-fixed-frequency) example.
-
