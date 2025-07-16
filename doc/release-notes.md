@@ -23,7 +23,7 @@ Use the PubSub+ Connector to leverage PubSub+ Event Broker (event streaming) and
   - **Instrumented Operations**: All major operations (Publish, Consume, Request-Reply, Ack/Nack) and message sources (Queue Listener, Topic Listener) are instrumented to generate detailed trace spans when tracing is active.
 
 ### Fixed Issues
-* No fixed issues in this release.
+* Fixed a synchronization issue in the connector's connection management that prevented proper resource cleanup and caused thread blocking (requiring application restart) when a Connection was shared between multiple Operations while using the Mule Reconnect Strategy (DATAGO-105128) 
 
 ## v1.7.0
 **Mar 14, 2025**

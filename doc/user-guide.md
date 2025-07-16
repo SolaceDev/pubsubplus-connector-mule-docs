@@ -344,7 +344,7 @@ Although this is not a secret setting, if your org prefix is different than the 
 
 ### Distributed Tracing
 
-The Solace PubSub+ Connector for Mule 4 supports distributed tracing using OpenTelemetry, which allows you to trace the journey of a message across multiple systems. This provides end-to-end visibility into your event-driven architecture, making it easier to monitor and troubleshoot your applications.
+The Solace PubSub+ Connector for Mule 4 supports distributed tracing using OpenTelemetry (SDK v1.40.0), which allows you to trace the journey of a message across multiple systems. This provides end-to-end visibility into your event-driven architecture, making it easier to monitor and troubleshoot your applications.
 
 There are two ways to configure distributed tracing (Note that these options are mutually exclusive; you can only enable one at a time):
 

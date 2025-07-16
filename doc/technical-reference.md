@@ -7771,7 +7771,7 @@ The time unit for the trip timeout value.
 
 ### Distributed Tracing
 
-The Connector supports distributed tracing using OpenTelemetry, which allows you to trace the journey of a message across multiple systems. This provides end-to-end visibility into your event-driven architecture, making it easier to monitor and troubleshoot your applications.
+The Connector supports distributed tracing using OpenTelemetry (SDK v1.40.0), which allows you to trace the journey of a message across multiple systems. This provides end-to-end visibility into your event-driven architecture, making it easier to monitor and troubleshoot your applications.
 
 There are two ways to configure distributed tracing (Note that these options are mutually exclusive; you can only enable one at a time):
 
