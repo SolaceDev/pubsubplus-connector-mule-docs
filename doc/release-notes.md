@@ -24,7 +24,8 @@ Use the PubSub+ Connector to leverage PubSub+ Event Broker (event streaming) and
 ### Fixed Issues
 * Fixed a synchronization issue in the connector's connection management that prevented proper resource cleanup and caused thread blocking (requiring application restart) when a Connection was shared between multiple Operations while using the Mule Reconnect Strategy (DATAGO-105128) 
 
-> **Important:** Event Portal v1 (EPv1) has officially reached its end-of-life and is no longer supported in the Connector. For complete deprecation details, refer to the [official documentation](https://docs.solace.com/Release-Notes/PubSub-Cloud-Release-Notes.htm#end-of-access-to-event-portal-1-0)
+### Deprecation Notice
+* Event Portal v1 (EPv1) has officially reached its end-of-life and is no longer supported. The connector will no longer include Event Portal integration capabilities in any form. The existing Event Portal functionality will be removed from the Connector in the future release. For complete deprecation details, refer to the [official documentation](https://docs.solace.com/Release-Notes/PubSub-Cloud-Release-Notes.htm#end-of-access-to-event-portal-1-0)
 
 ## v1.7.0
 **Mar 14, 2025**

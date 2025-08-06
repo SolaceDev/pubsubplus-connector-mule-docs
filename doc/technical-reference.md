@@ -6564,6 +6564,7 @@ How often (in ms) to reconnect
 <div class="sect2">
 
 ### Event Portal Config Parameter
+> *⚠️ Deprecated:* Event Portal functionality is no longer supported. See [Deprecation Notice](doc/release-notes.md:27) for details. 
 
 <table class="tableblock frame-all grid-all spread"><colgroup><col style="width: 20%;"> <col style="width: 25%;"> <col style="width: 30%;"> <col style="width: 15%;"> <col style="width: 10%;"></colgroup>
 
