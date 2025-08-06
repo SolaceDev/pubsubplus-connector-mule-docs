@@ -3,7 +3,7 @@
 Use the PubSub+ Connector to leverage PubSub+ Event Broker (event streaming) and PubSub+ Event Portal (event management) within MuleSoft Anypoint Platform, to make your MuleSoft integrations more reliable, agile, and event-driven.
 
 ## v1.8.0
-**Aug 4, 2025**
+**Aug 6, 2025**
 ### Compatibility
 
 | Application/Service  | Version          |
@@ -12,7 +12,6 @@ Use the PubSub+ Connector to leverage PubSub+ Event Broker (event streaming) and
 | Studio Version       | 7.9 and higher   |
 | PubSub+ Event Broker | 9.1 and higher   |
 | Java                 | 1.8 and 17       |
-| Solace JCSMP SDK     | 10.27.2          |
 
 ### New Features
 * **Distributed Tracing with OpenTelemetry**: The connector is now instrumented with OpenTelemetry to support distributed tracing. When enabled, this feature provides visibility into message flows by propagating trace context within the connector. By default, tracing is disabled (using a `NoOp` tracer) to ensure no performance impact unless explicitly configured.
@@ -24,6 +23,8 @@ Use the PubSub+ Connector to leverage PubSub+ Event Broker (event streaming) and
 
 ### Fixed Issues
 * Fixed a synchronization issue in the connector's connection management that prevented proper resource cleanup and caused thread blocking (requiring application restart) when a Connection was shared between multiple Operations while using the Mule Reconnect Strategy (DATAGO-105128) 
+
+> **Important:** Event Portal v1 (EPv1) has officially reached its end-of-life and is no longer supported in the Connector. For complete deprecation details, refer to the [official documentation](https://docs.solace.com/Release-Notes/PubSub-Cloud-Release-Notes.htm#end-of-access-to-event-portal-1-0)
 
 ## v1.7.0
 **Mar 14, 2025**
