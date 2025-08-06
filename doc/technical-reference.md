@@ -37,6 +37,7 @@
     * [Outbound Additional Message Properties](#outbound-additional-message-properties)
     * [Reply To Destination Parameter](#reply-to-destination-parameter)
     * [Circuit Breaker Configuration Parameter](#circuit-breaker-configuration-parameter)
+    * [Distributed Tracing](#distributed-tracing)
 
 </div>
 
@@ -850,6 +851,43 @@ The "Reference Id" property from the Solace Message Properties of the message to
 
 <td class="tableblock halign-left valign-middle">
 
+Parent Trace
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+<div>
+
+<div class="paragraph">
+
+Map
+
+</div>
+
+</div>
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+A map containing the trace context to be propagated with the message. This map MUST include two required fields:
+1. otel_parent_trace_id
+2. otel_parent_span_id
+
+These fields ensure that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, you must provide a map with these two required fields, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`.
+</td>
+
+<td class="tableblock halign-left valign-middle"></td>
+
+<td class="tableblock halign-center valign-middle"></td>
+
+</tr>
+
+<tr>
+
+<td class="tableblock halign-left valign-middle">
+
 Reconnection Strategy
 
 </td>
@@ -1063,6 +1101,43 @@ This negative acknowledgment notifies the event broker that the message was not 
 <td class="tableblock halign-center valign-middle">
 
 </td>
+
+</tr>
+
+<tr>
+
+<td class="tableblock halign-left valign-middle">
+
+Parent Trace
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+<div>
+
+<div class="paragraph">
+
+Map
+
+</div>
+
+</div>
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+A map containing the trace context to be propagated with the message. This map MUST include two required fields:
+1. otel_parent_trace_id
+2. otel_parent_span_id
+
+These fields ensure that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, you must provide a map with these two required fields, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`.
+</td>
+
+<td class="tableblock halign-left valign-middle"></td>
+
+<td class="tableblock halign-center valign-middle"></td>
 
 </tr>
 
@@ -1735,6 +1810,43 @@ An expression that will be evaluated against the operation's output and the outc
 #[payload]
 
 </td>
+
+<td class="tableblock halign-center valign-middle"></td>
+
+</tr>
+
+<tr>
+
+<td class="tableblock halign-left valign-middle">
+
+Parent Trace
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+<div>
+
+<div class="paragraph">
+
+Map
+
+</div>
+
+</div>
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+A map containing the trace context to be propagated with the message. This map MUST include two required fields:
+1. otel_parent_trace_id
+2. otel_parent_span_id
+
+These fields ensure that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, you must provide a map with these two required fields, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`.
+</td>
+
+<td class="tableblock halign-left valign-middle"></td>
 
 <td class="tableblock halign-center valign-middle"></td>
 
@@ -2472,6 +2584,43 @@ String
 
 The default encoding of the Message body to be used if the message doesn't communicate it
 
+</td>
+
+<td class="tableblock halign-left valign-middle"></td>
+
+<td class="tableblock halign-center valign-middle"></td>
+
+</tr>
+
+<tr>
+
+<td class="tableblock halign-left valign-middle">
+
+Parent Trace
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+<div>
+
+<div class="paragraph">
+
+Map
+
+</div>
+
+</div>
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+A map containing the trace context to be propagated with the message. This map MUST include two required fields:
+1. otel_parent_trace_id
+2. otel_parent_span_id
+
+These fields ensure that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, you must provide a map with these two required fields, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`.
 </td>
 
 <td class="tableblock halign-left valign-middle"></td>
@@ -3247,6 +3396,43 @@ An expression that will be evaluated against the operation's output and the outc
 #[payload]
 
 </td>
+
+<td class="tableblock halign-center valign-middle"></td>
+
+</tr>
+
+<tr>
+
+<td class="tableblock halign-left valign-middle">
+
+Parent Trace
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+<div>
+
+<div class="paragraph">
+
+Map
+
+</div>
+
+</div>
+
+</td>
+
+<td class="tableblock halign-left valign-middle">
+
+A map containing the trace context to be propagated with the message. This map MUST include two required fields:
+1. otel_parent_trace_id
+2. otel_parent_span_id
+
+These fields ensure that the new span created by this operation is correctly linked to the ongoing trace. If the incoming message is from a Solace source, its `attributes.traceData` can be passed here directly. Otherwise, you must provide a map with these two required fields, for example: `{'otel_parent_trace_id': '343119abd53067122d1d1ab3af1d845d', 'otel_parent_span_id': '6f59e2d92afd3ddc'}`.
+</td>
+
+<td class="tableblock halign-left valign-middle"></td>
 
 <td class="tableblock halign-center valign-middle"></td>
 
@@ -7582,6 +7768,46 @@ The time unit for the trip timeout value.
 </tbody>
 
 </table>
+
+### Distributed Tracing
+
+The Connector supports distributed tracing using OpenTelemetry (SDK v1.40.0), which allows you to trace the journey of a message across multiple systems. This provides end-to-end visibility into your event-driven architecture, making it easier to monitor and troubleshoot your applications.
+
+There are two ways to configure distributed tracing (Note that these options are mutually exclusive; you can only enable one at a time):
+
+> **Important:** The Distributed Tracing configuration is managed as a global singleton for all Solace Connector instances within a single Java runtime. Therefore, it is crucial to maintain a consistent configuration across all connections. Either disable distributed tracing for all connections or enable it with the same configuration for all of them. Mixing enabled and disabled configurations, or using different configurations across multiple connections, can lead to unexpected tracing behavior.
+
+*   **Automatic Configuration (Recommended for Production)**: This approach uses standard OpenTelemetry environment variables to configure the tracer. It is the most flexible option and supports all authentication methods, exporters, and sampling strategies defined by the OpenTelemetry standard.
+*   **Manual Configuration (for Local Development and Testing)**: This option provides a simplified configuration for local development and testing. It supports basic configuration with limited exporters in unauthenticated mode only.
+
+#### Automatic Configuration
+
+To enable automatic configuration, select the **OpenTelemetry Environment-based Auto-configuration (Recommended)** checkbox in the **Distributed Tracing** tab of the connector's global configuration.
+
+![alt text](/doc/images/AutoDTConfig.png "New Connector Config: Distributed Tracing - Automatic")
+
+When this option is enabled, the connector will use the following environment variables to configure the tracer:
+
+*   `OTEL_EXPORTER_OTLP_ENDPOINT`: The endpoint of the OpenTelemetry collector.
+*   `OTEL_SERVICE_NAME`: The name of the service that is generating the traces.
+*   `OTEL_TRACES_SAMPLER`: The sampler to use for sampling traces (e.g., `always_on`, `always_off`, `traceidratio`).
+
+For a full list of supported environment variables, refer to the [OpenTelemetry SDK Autoconfiguration](https://github.com/open-telemetry/opentelemetry-java/blob/main/sdk-extensions/autoconfigure/README.md) documentation.
+
+#### Manual Configuration
+
+To enable manual configuration, select the **Local Development Tracing Configuration** checkbox in the **Distributed Tracing** tab of the connector's global configuration.
+
+![alt text](/doc/images/ManualDTConfig.png "New Connector Config: Distributed Tracing - Manual")
+
+The following parameters can be configured:
+
+| Parameter field        | Description                                                                                                       |
+|------------------------|-------------------------------------------------------------------------------------------------------------------|
+| Tracer Service Name    | The name of the service that is generating the traces. Defaults to `Solace Mule PubSub+ Connector`.               |
+| Span Exporter Type     | The type of exporter to use for sending traces. Supported values are `GRPC`, `HTTP`, and `NONE`.                  |
+| Span Exporter Endpoint | The endpoint of the OpenTelemetry collector. This is only required if the Span Exporter Type is `GRPC` or `HTTP`. |
+
 
 </div>
 
