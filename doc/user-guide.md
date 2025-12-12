@@ -570,7 +570,7 @@ The following additional parameter in the attributes list is a unique, internall
 | Parameter field    | Description                                                                                                                     |
 |--------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | messageReferenceId | Use this ID to explicitly acknowledge a message                                                                                 |
-| traceData          | A map containing the trace context from the inbound message. This can be passed to subsequent operations to continue the trace. |
+| traceData          | A map containing the trace context from the inbound message. This can be passed to subsequent operations to continue the trace. When distributed tracing is enabled, Listener operations generate two spans: a Receive span (for message reception) and a Process span (for message processing). By default, the Process span context is available with keys `otel_parent_trace_id` and `otel_parent_span_id`. Additionally, the Receive span context is available under the key `otel_receive_span_context` as a map containing the parent trace ID and parent span ID of the receive operation. |
 
 </br>
 

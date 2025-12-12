@@ -2,6 +2,20 @@
 
 Use the PubSub+ Connector to leverage PubSub+ Event Broker (event streaming) and PubSub+ Event Portal (event management) within MuleSoft Anypoint Platform, to make your MuleSoft integrations more reliable, agile, and event-driven.
 
+## v1.8.1
+**Dec 31, 2025**
+### Compatibility
+
+| Application/Service  | Version          |
+|----------------------|------------------|
+| Mule Runtime         | 4.3 and higher   |
+| Studio Version       | 7.9 and higher   |
+| PubSub+ Event Broker | 9.1 and higher   |
+| Java                 | 1.8 and 17       |
+
+### Enhanced Features
+* Added Receive span context to distributed tracing for Listener operations. The trace data now includes both Process and Receive span information under a new `otel_receive_span_context` key for improved OpenTelemetry trace propagation.
+
 ## v1.8.0
 **Aug 6, 2025**
 ### Compatibility
