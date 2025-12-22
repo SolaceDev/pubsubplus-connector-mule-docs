@@ -56,7 +56,7 @@ MuleSoft disclaims any support obligation for MuleSoft Certified Connectors. By 
 <dependency>
   <groupId>com.solace.connector</groupId>
   <artifactId>solace-mulesoft-connector</artifactId>
-  <version>1.8.0</version>
+  <version>1.8.1</version>
   <classifier>mule-plugin</classifier>
 </dependency>
 ```
@@ -76,7 +76,7 @@ Connector
 Published by: MuleSoft Partner
 </br>
 
-Published on: Aug, 2025
+Published on: Dec, 2025
 </br>
 
 Level: MuleSoft-Certified

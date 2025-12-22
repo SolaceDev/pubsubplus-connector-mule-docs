@@ -313,6 +313,7 @@ Set the default message encoding for the connector. This value is applied if the
 Set the default content type for the connector. This value is applied if the content type is not provided in the Solace message or explicitly in either the Source or the Operation.
 
 ### Event Portal Configuration
+> *⚠️ Deprecated:* Event Portal functionality is no longer supported. See [Deprecation Notice](release-notes.md#deprecation-notice) for details.
 
 This configuartion can be used to configure access to the Solace PubSub+ Event Portal for design-time integration.
 
@@ -323,6 +324,7 @@ This configuartion can be used to configure access to the Solace PubSub+ Event P
 ![alt text](/doc/images/NowConnectorConfig-EventPortal.png "New Connector Config: Event Portal")
 
 #### Event Portal API Token
+> *⚠️ Deprecated:* Event Portal functionality is no longer supported. See [Deprecation Notice](release-notes.md#deprecation-notice) for details.
 
 For details about how to get the API token, refer to the [Setting Up and Getting Access to the PubSub+ Event Catalog](#setting-up-and-getting-access-to-the-pubsub-event-catalog) section.
 
@@ -334,6 +336,7 @@ Although you can use this field to configure access to Event Portal, it results 
 ```
 
 #### Event Portal Console Organization Prefix
+> *⚠️ Deprecated:* Event Portal functionality is no longer supported. See [Deprecation Notice](release-notes.md#deprecation-notice) for details.
 
 This parameter should be set for non-default organizations and is used to determine the HTTP link displayed for the selected event in Event Portal. If not provided, the default value is used (`console.solace.cloud`).
 > For example: A value of `mycompany-sso` would result in Event Portal links like: `https://mycompany-sso.solace.cloud/...`
@@ -515,10 +518,12 @@ Note that it is optional to use the Event Portal integration—the connector wil
 These parameters are similar for all applicable sources and operations, so they are described here for all cases.
 
 #### Event Portal Integration-Related Parameters
+> *⚠️ Deprecated:* Event Portal functionality is no longer supported. See [Deprecation Notice](release-notes.md#deprecation-notice) for details.
 
 These parameters appear in the "General" parameter group.
 
 ##### Event Portal Event
+> *⚠️ Deprecated:* Event Portal functionality is no longer supported. See [Deprecation Notice](release-notes.md#deprecation-notice) for details.
 
 | Parameter field | Description |
 |---|---|
@@ -565,7 +570,7 @@ The following additional parameter in the attributes list is a unique, internall
 | Parameter field    | Description                                                                                                                     |
 |--------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | messageReferenceId | Use this ID to explicitly acknowledge a message                                                                                 |
-| traceData          | A map containing the trace context from the inbound message. This can be passed to subsequent operations to continue the trace. |
+| traceData          | A map containing the trace context from the inbound message. This can be passed to subsequent operations to continue the trace. When distributed tracing is enabled, Listener operations generate two spans: a Receive span (for message reception) and a Process span (for message processing). By default, the Process span context is available with keys `otel_parent_trace_id` and `otel_parent_span_id`. Additionally, the Receive span context is available under the key `otel_receive_span_context` as a map containing the parent trace ID and parent span ID of the receive operation. |
 
 </br>
 
